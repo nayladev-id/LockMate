@@ -74,6 +74,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # ── Assets ───────────────────────────────────────────────────────────────
+  assets:
+    - assets/images/logo.png
+
   # ── Fonts ────────────────────────────────────────────────────────────────
   # Font diakses via google_fonts package (bundled saat build, no CDN).
   # google_fonts men-cache font file di app documents dir setelah download
@@ -85,5 +89,3 @@ flutter:
   #   Headline / Title → GoogleFonts.hankenGrotesk() — weight 600/700
   #   Body             → GoogleFonts.inter()          — weight 400/500
   #   Password / Label → GoogleFonts.jetBrainsMono()  — weight 500/600
-
-
