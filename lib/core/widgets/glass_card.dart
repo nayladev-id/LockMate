@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
-/// GlassCard — card kustom ZeroCrypt dengan efek glassmorphism.
+/// GlassCard — card kustom lockmate dengan efek glassmorphism.
 ///
 /// WAJIB digunakan sebagai pengganti [Card] bawaan Flutter di seluruh app.
 ///
@@ -59,10 +59,7 @@ class GlassCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.kGlassCard,
             borderRadius: radius,
-            border: Border.all(
-              color: AppColors.kGlassBorder,
-              width: 1.0,
-            ),
+            border: Border.all(color: AppColors.kGlassBorder, width: 1.0),
             boxShadow: showGlow
                 ? [
                     BoxShadow(
@@ -73,10 +70,7 @@ class GlassCard extends StatelessWidget {
                   ]
                 : null,
           ),
-          child: Padding(
-            padding: padding,
-            child: child,
-          ),
+          child: Padding(padding: padding, child: child),
         ),
       ),
     );
@@ -134,9 +128,10 @@ class _GlassCardAnimatedState extends State<GlassCardAnimated>
       vsync: this,
       duration: const Duration(milliseconds: 1800),
     );
-    _glowAnim = Tween<double>(begin: 0.6, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _glowAnim = Tween<double>(
+      begin: 0.6,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     if (widget.showGlow) _controller.repeat(reverse: true);
   }
 

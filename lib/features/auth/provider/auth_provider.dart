@@ -11,19 +11,14 @@ import '../model/user_profile.dart';
 /// Hasil operasi autentikasi — digunakan sebagai return value seluruh
 /// method auth agar Screen tidak perlu catch exception secara langsung.
 class AuthResult {
-  const AuthResult._({
-    required this.isSuccess,
-    this.errorMessage,
-  });
+  const AuthResult._({required this.isSuccess, this.errorMessage});
 
   /// Operasi berhasil.
   factory AuthResult.success() => const AuthResult._(isSuccess: true);
 
   /// Operasi gagal dengan pesan error yang aman ditampilkan ke UI.
-  factory AuthResult.error(String message) => AuthResult._(
-        isSuccess: false,
-        errorMessage: message,
-      );
+  factory AuthResult.error(String message) =>
+      AuthResult._(isSuccess: false, errorMessage: message);
 
   /// `true` jika operasi berhasil.
   final bool isSuccess;
@@ -32,14 +27,13 @@ class AuthResult {
   final String? errorMessage;
 
   @override
-  String toString() => isSuccess
-      ? 'AuthResult.success()'
-      : 'AuthResult.error($errorMessage)';
+  String toString() =>
+      isSuccess ? 'AuthResult.success()' : 'AuthResult.error($errorMessage)';
 }
 
 // ── AuthProvider ──────────────────────────────────────────────────────────────
 
-/// AuthProvider — mengelola seluruh state dan logika autentikasi ZeroCrypt.
+/// AuthProvider — mengelola seluruh state dan logika autentikasi lockmate.
 ///
 /// State yang dikelola:
 ///   - Status autentikasi ([isAuthenticated])
@@ -60,9 +54,9 @@ class AuthProvider extends ChangeNotifier {
     required CryptoService crypto,
     required SecureStorageService secureStorage,
     required StorageService storage,
-  })  : _crypto = crypto,
-        _secureStorage = secureStorage,
-        _storage = storage;
+  }) : _crypto = crypto,
+       _secureStorage = secureStorage,
+       _storage = storage;
 
   // ── Dependencies ─────────────────────────────────────────────────────────────
 
@@ -81,8 +75,8 @@ class AuthProvider extends ChangeNotifier {
 
   // ── Lockout config ───────────────────────────────────────────────────────────
 
-  static const int _maxFailedAttempts  = 3;
-  static const int _lockoutSeconds     = 30;
+  static const int _maxFailedAttempts = 3;
+  static const int _lockoutSeconds = 30;
 
   // ── Getters ──────────────────────────────────────────────────────────────────
 
@@ -152,9 +146,9 @@ class AuthProvider extends ChangeNotifier {
   ///
   /// Dipanggil setelah login berhasil untuk mengisi state [_profile].
   Future<void> loadProfile() async {
-    final displayName      = await _storage.getDisplayName();
+    final displayName = await _storage.getDisplayName();
     final biometricEnabled = await _storage.getBiometricEnabled();
-    final autoLockMinutes  = await _storage.getAutoLockDuration();
+    final autoLockMinutes = await _storage.getAutoLockDuration();
 
     _profile = UserProfile(
       displayName: displayName,
@@ -212,8 +206,8 @@ class AuthProvider extends ChangeNotifier {
 
       // Set authenticated
       _isAuthenticated = true;
-      _failedAttempts  = 0;
-      _lockoutUntil    = null;
+      _failedAttempts = 0;
+      _lockoutUntil = null;
 
       notifyListeners();
       return AuthResult.success();
@@ -238,7 +232,7 @@ class AuthProvider extends ChangeNotifier {
     // Cek lockout aktif
     if (_checkAndRefreshLockout()) {
       final remaining = remainingLockout;
-      final seconds   = remaining?.inSeconds ?? _lockoutSeconds;
+      final seconds = remaining?.inSeconds ?? _lockoutSeconds;
       return AuthResult.error(
         'Terlalu banyak percobaan gagal. Coba lagi dalam $seconds detik.',
       );
@@ -263,8 +257,8 @@ class AuthProvider extends ChangeNotifier {
       if (isValid) {
         // ── Login berhasil ──
         _isAuthenticated = true;
-        _failedAttempts  = 0;
-        _lockoutUntil    = null;
+        _failedAttempts = 0;
+        _lockoutUntil = null;
 
         // Load profil
         await loadProfile();
@@ -309,9 +303,7 @@ class AuthProvider extends ChangeNotifier {
     // Cek lockout
     if (_checkAndRefreshLockout()) {
       final seconds = remainingLockout?.inSeconds ?? _lockoutSeconds;
-      return AuthResult.error(
-        'Akun dikunci. Coba lagi dalam $seconds detik.',
-      );
+      return AuthResult.error('Akun dikunci. Coba lagi dalam $seconds detik.');
     }
 
     _setLoading(true);
@@ -319,7 +311,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       // Cek apakah device support biometrik
       final canCheckBiometrics = await _localAuth.canCheckBiometrics;
-      final isDeviceSupported  = await _localAuth.isDeviceSupported();
+      final isDeviceSupported = await _localAuth.isDeviceSupported();
 
       if (!canCheckBiometrics || !isDeviceSupported) {
         return AuthResult.error(
@@ -329,18 +321,18 @@ class AuthProvider extends ChangeNotifier {
 
       // Tampilkan dialog biometrik sistem
       final didAuthenticate = await _localAuth.authenticate(
-        localizedReason: 'Konfirmasi identitas Anda untuk membuka ZeroCrypt',
+        localizedReason: 'Konfirmasi identitas Anda untuk membuka lockmate',
         options: const AuthenticationOptions(
           biometricOnly: false, // Fallback ke PIN device jika perlu
-          stickyAuth: true,     // Tetap tampil meski app background sebentar
+          stickyAuth: true, // Tetap tampil meski app background sebentar
           useErrorDialogs: true,
         ),
       );
 
       if (didAuthenticate) {
         _isAuthenticated = true;
-        _failedAttempts  = 0;
-        _lockoutUntil    = null;
+        _failedAttempts = 0;
+        _lockoutUntil = null;
 
         await loadProfile();
 
@@ -367,9 +359,9 @@ class AuthProvider extends ChangeNotifier {
   /// Vault items tetap ada (terenkripsi).
   void logout() {
     _isAuthenticated = false;
-    _profile         = null;
-    _failedAttempts  = 0;
-    _lockoutUntil    = null;
+    _profile = null;
+    _failedAttempts = 0;
+    _lockoutUntil = null;
 
     // Hapus session key dari secure storage secara async
     // (tidak perlu await — fire and forget untuk UX yang responsif)

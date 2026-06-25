@@ -28,7 +28,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _passController = TextEditingController();
   Timer? _lockoutTimer;
-  int   _remainingSeconds = 0;
+  int _remainingSeconds = 0;
 
   @override
   void initState() {
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    final auth   = context.read<AuthProvider>();
+    final auth = context.read<AuthProvider>();
     final result = await auth.login(password);
 
     if (!mounted) return;
@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _tryBiometric() async {
-    final auth   = context.read<AuthProvider>();
+    final auth = context.read<AuthProvider>();
     final result = await auth.loginWithBiometric();
 
     if (!mounted) return;
@@ -142,10 +142,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth      = context.watch<AuthProvider>();
+    final auth = context.watch<AuthProvider>();
     final isLoading = auth.isLoading;
-    final isLocked  = auth.isLockedOut;
-    final profile   = auth.profile;
+    final isLocked = auth.isLockedOut;
+    final profile = auth.profile;
 
     return Scaffold(
       backgroundColor: AppColors.kBackground,
@@ -169,81 +169,76 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10),
 
                 Text(
-                  'ZEROCRYPT',
+                  'lockmate',
                   style: AppTextStyles.titleMd.copyWith(
                     color: AppColors.kPrimaryContainer,
                     letterSpacing: 3.0,
                     fontWeight: FontWeight.w700,
                   ),
-                )
-                    .animate()
-                    .fadeIn(delay: 200.ms, duration: 400.ms),
+                ).animate().fadeIn(delay: 200.ms, duration: 400.ms),
 
                 const SizedBox(height: 36),
 
                 // ── Login card ────────────────────────────────────────────────
                 GlassCard(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Welcome
-                      Text(
-                        'Welcome back,',
-                        style: AppTextStyles.bodyMd,
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Welcome
+                          Text('Welcome back,', style: AppTextStyles.bodyMd),
+                          const SizedBox(height: 4),
+                          Text(
+                            profile?.displayName ?? 'Vault User',
+                            style: AppTextStyles.titleLg,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // Password field
+                          PasswordField(
+                            label: 'Master Password',
+                            hintText: 'Masukkan master password',
+                            controller: _passController,
+                            prefixIcon: Icons.lock_outline_rounded,
+                            enabled: !isLocked && !isLoading,
+                            onFieldSubmitted: (_) => _login(),
+                            autofocus: profile?.biometricEnabled != true,
+                          ),
+
+                          // Lockout countdown
+                          if (isLocked || _remainingSeconds > 0) ...[
+                            const SizedBox(height: 10),
+                            _LockoutBanner(seconds: _remainingSeconds),
+                          ],
+
+                          const SizedBox(height: 20),
+
+                          // Unlock button
+                          CyberButton(
+                            label: 'UNLOCK VAULT',
+                            icon: Icons.lock_open_rounded,
+                            isFullWidth: true,
+                            isLoading: isLoading,
+                            onPressed: (isLocked || isLoading) ? null : _login,
+                          ),
+
+                          // Biometric button
+                          if (profile?.biometricEnabled == true) ...[
+                            const SizedBox(height: 12),
+                            CyberButtonOutlined(
+                              label: 'USE BIOMETRIC',
+                              icon: Icons.fingerprint_rounded,
+                              isFullWidth: true,
+                              onPressed: (isLocked || isLoading)
+                                  ? null
+                                  : _tryBiometric,
+                            ),
+                          ],
+                        ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        profile?.displayName ?? 'Vault User',
-                        style: AppTextStyles.titleLg,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Password field
-                      PasswordField(
-                        label: 'Master Password',
-                        hintText: 'Masukkan master password',
-                        controller: _passController,
-                        prefixIcon: Icons.lock_outline_rounded,
-                        enabled: !isLocked && !isLoading,
-                        onFieldSubmitted: (_) => _login(),
-                        autofocus: profile?.biometricEnabled != true,
-                      ),
-
-                      // Lockout countdown
-                      if (isLocked || _remainingSeconds > 0) ...[
-                        const SizedBox(height: 10),
-                        _LockoutBanner(seconds: _remainingSeconds),
-                      ],
-
-                      const SizedBox(height: 20),
-
-                      // Unlock button
-                      CyberButton(
-                        label: 'UNLOCK VAULT',
-                        icon: Icons.lock_open_rounded,
-                        isFullWidth: true,
-                        isLoading: isLoading,
-                        onPressed: (isLocked || isLoading) ? null : _login,
-                      ),
-
-                      // Biometric button
-                      if (profile?.biometricEnabled == true) ...[
-                        const SizedBox(height: 12),
-                        CyberButtonOutlined(
-                          label: 'USE BIOMETRIC',
-                          icon: Icons.fingerprint_rounded,
-                          isFullWidth: true,
-                          onPressed: (isLocked || isLoading)
-                              ? null
-                              : _tryBiometric,
-                        ),
-                      ],
-                    ],
-                  ),
-                )
+                    )
                     .animate()
                     .fadeIn(delay: 300.ms, duration: 500.ms)
                     .slideY(
@@ -258,10 +253,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // ── Different account ─────────────────────────────────────────
                 TextButton(
-                  onPressed: () => Navigator.pushReplacementNamed(
-                    context,
-                    '/register',
-                  ),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/register'),
                   child: Text(
                     'Different Account?',
                     style: AppTextStyles.bodyMd.copyWith(

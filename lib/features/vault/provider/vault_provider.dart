@@ -7,7 +7,7 @@ import '../../../services/crypto_service.dart';
 import '../../../services/storage_service.dart';
 import '../model/vault_item.dart';
 
-/// VaultProvider — mengelola seluruh state dan operasi vault ZeroCrypt.
+/// VaultProvider — mengelola seluruh state dan operasi vault lockmate.
 ///
 /// Kebijakan keamanan yang WAJIB dijaga:
 ///   1. [_items] di memori berisi VaultItem dengan [decryptedPassword] terisi.
@@ -23,24 +23,24 @@ class VaultProvider extends ChangeNotifier {
   VaultProvider({
     required StorageService storage,
     required CryptoService crypto,
-  })  : _storage = storage,
-        _crypto  = crypto;
+  }) : _storage = storage,
+       _crypto = crypto;
 
   // ── Dependencies ────────────────────────────────────────────────────────────
 
   final StorageService _storage;
-  final CryptoService  _crypto;
+  final CryptoService _crypto;
 
   // ── State ───────────────────────────────────────────────────────────────────
 
-  List<VaultItem> _items          = [];
-  String          _searchQuery    = '';
-  bool            _isLoading      = false;
-  String?         _error;
+  List<VaultItem> _items = [];
+  String _searchQuery = '';
+  bool _isLoading = false;
+  String? _error;
 
   /// Master password sesi aktif — di-set saat [loadItems], di-clear saat [clearAll].
   /// Digunakan oleh AddAccountSheet / EditCredentialScreen tanpa dialog ulang.
-  String?         _sessionPassword;
+  String? _sessionPassword;
 
   // Clipboard auto-clear timer
   Timer? _clipboardTimer;
@@ -146,7 +146,7 @@ class VaultProvider extends ChangeNotifier {
       }
 
       _items = decryptedItems;
-      _sessionPassword = masterPassword;   // simpan untuk sesi aktif
+      _sessionPassword = masterPassword; // simpan untuk sesi aktif
       notifyListeners();
     } catch (e) {
       _setError('Gagal memuat vault. Coba lagi.');
@@ -173,7 +173,7 @@ class VaultProvider extends ChangeNotifier {
 
     try {
       // Enkripsi password — IV random baru setiap kali (sesuai crypto skill)
-      final encryptedPass  = _crypto.encrypt(plainPassword, masterPassword);
+      final encryptedPass = _crypto.encrypt(plainPassword, masterPassword);
 
       // Enkripsi notes jika ada
       final encryptedNotes = (notes != null && notes.isNotEmpty)
@@ -182,10 +182,10 @@ class VaultProvider extends ChangeNotifier {
 
       // Buat item baru — encryptedPassword untuk storage, decryptedPassword di memori
       final newItem = VaultItem.create(
-        platformName:      platformName,
-        username:          username,
+        platformName: platformName,
+        username: username,
         encryptedPassword: encryptedPass,
-        encryptedNotes:    encryptedNotes,
+        encryptedNotes: encryptedNotes,
         decryptedPassword: plainPassword,
       );
 
@@ -215,14 +215,13 @@ class VaultProvider extends ChangeNotifier {
 
     try {
       // Enkripsi password baru
-      final encryptedPass = updatedItem.decryptedPassword != null &&
+      final encryptedPass =
+          updatedItem.decryptedPassword != null &&
               updatedItem.decryptedPassword!.isNotEmpty
           ? _crypto.encrypt(updatedItem.decryptedPassword!, masterPassword)
           : updatedItem.encryptedPassword;
 
-      final itemToSave = updatedItem.copyWith(
-        encryptedPassword: encryptedPass,
-      );
+      final itemToSave = updatedItem.copyWith(encryptedPassword: encryptedPass);
 
       // Update di list
       _items = _items.map((item) {
@@ -335,10 +334,10 @@ class VaultProvider extends ChangeNotifier {
   /// Tidak menghapus data dari storage — hanya clear in-memory state.
   /// Untuk wipe storage, panggil [StorageService.clearVault()] secara terpisah.
   void clearAll() {
-    _items           = [];
-    _searchQuery     = '';
-    _error           = null;
-    _sessionPassword = null;  // wipe session password dari memori
+    _items = [];
+    _searchQuery = '';
+    _error = null;
+    _sessionPassword = null; // wipe session password dari memori
 
     // Cancel clipboard timer dan clear clipboard saat logout
     _clipboardTimer?.cancel();

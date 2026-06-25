@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-/// CyberButton — tombol utama ZeroCrypt dengan efek Cyber Blue glow.
+/// CyberButton — tombol utama lockmate dengan efek Cyber Blue glow.
 ///
 /// Spesifikasi:
 /// - Background: [AppColors.kPrimaryContainer] (Cyber Blue)
@@ -69,12 +69,14 @@ class _CyberButtonState extends State<CyberButton>
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _glowAnim = Tween<double>(begin: 15.0, end: 28.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
-    _scaleAnim = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _glowAnim = Tween<double>(
+      begin: 15.0,
+      end: 28.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
   }
 
   @override
@@ -157,15 +159,13 @@ class _CyberButtonState extends State<CyberButton>
       );
     }
 
-    final labelColor =
-        isEnabled ? AppColors.kOnPrimary : AppColors.kDisabled;
+    final labelColor = isEnabled ? AppColors.kOnPrimary : AppColors.kDisabled;
     final iconColor = isEnabled ? AppColors.kOnPrimary : AppColors.kDisabled;
 
     if (widget.icon != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize:
-            widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+        mainAxisSize: widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
         children: [
           Icon(widget.icon, color: iconColor, size: 20),
           const SizedBox(width: 8),
@@ -213,17 +213,19 @@ class CyberButtonOutlined extends StatelessWidget {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.kPrimaryContainer,
           side: const BorderSide(
-              color: AppColors.kPrimaryContainer, width: 1.5),
+            color: AppColors.kPrimaryContainer,
+            width: 1.5,
+          ),
           shape: const StadiumBorder(),
           padding: const EdgeInsets.symmetric(horizontal: 28),
-          textStyle: AppTextStyles.buttonLabel
-              .copyWith(color: AppColors.kPrimaryContainer),
+          textStyle: AppTextStyles.buttonLabel.copyWith(
+            color: AppColors.kPrimaryContainer,
+          ),
         ),
         child: icon != null
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize:
-                    isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+                mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
                 children: [
                   Icon(icon, size: 20),
                   const SizedBox(width: 8),

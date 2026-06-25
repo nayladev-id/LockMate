@@ -19,7 +19,7 @@ enum PasswordStrength {
   veryStrong,
 }
 
-/// CryptoService — semua operasi enkripsi/dekripsi ZeroCrypt.
+/// CryptoService — semua operasi enkripsi/dekripsi lockmate.
 ///
 /// Prinsip keamanan yang WAJIB dijaga:
 ///   1. Master password TIDAK pernah disimpan — hanya hash-nya.
@@ -146,7 +146,7 @@ class CryptoService {
   ///   - Verifikasi login: `hashPassword(input) == storedHash`
   ///
   /// CATATAN: Untuk aplikasi produksi level tinggi, gunakan PBKDF2/Argon2.
-  /// SHA-256 digunakan di sini sesuai spesifikasi Sesi 1 ZeroCrypt.
+  /// SHA-256 digunakan di sini sesuai spesifikasi Sesi 1 lockmate.
   String hashPassword(String password) {
     if (password.isEmpty) throw ArgumentError('password tidak boleh kosong');
     final bytes = utf8.encode(password);
