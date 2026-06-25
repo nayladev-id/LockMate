@@ -161,7 +161,7 @@ A modern visual identity with smooth interactions, subtle animations, and a prem
 ### Developers
 
 * Nayla Putri Salsabila
-* Anjel
+* Anjel dina e
 
 ---
 
