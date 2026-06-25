@@ -1,4 +1,4 @@
-/// Model profil pengguna ZeroCrypt.
+/// Model profil pengguna lockmate.
 ///
 /// Disimpan secara non-sensitif via [StorageService]:
 ///   - [displayName]       → SharedPreferences key `zc_display_name`
@@ -28,28 +28,28 @@ class UserProfile {
 
   /// Profil default untuk pengguna baru sebelum registrasi selesai.
   factory UserProfile.defaultProfile() => const UserProfile(
-        displayName: 'Vault User',
-        biometricEnabled: false,
-        autoLockMinutes: 5,
-      );
+    displayName: 'Vault User',
+    biometricEnabled: false,
+    autoLockMinutes: 5,
+  );
 
   // ── Serialization ───────────────────────────────────────────────────────────
 
   /// Konversi ke Map untuk disimpan sebagai JSON.
   Map<String, dynamic> toJson() => {
-        'displayName': displayName,
-        'biometricEnabled': biometricEnabled,
-        'autoLockMinutes': autoLockMinutes,
-      };
+    'displayName': displayName,
+    'biometricEnabled': biometricEnabled,
+    'autoLockMinutes': autoLockMinutes,
+  };
 
   /// Buat [UserProfile] dari Map JSON.
   ///
   /// Toleran terhadap field yang hilang — menggunakan nilai default.
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-        displayName: json['displayName'] as String? ?? 'Vault User',
-        biometricEnabled: json['biometricEnabled'] as bool? ?? false,
-        autoLockMinutes: json['autoLockMinutes'] as int? ?? 5,
-      );
+    displayName: json['displayName'] as String? ?? 'Vault User',
+    biometricEnabled: json['biometricEnabled'] as bool? ?? false,
+    autoLockMinutes: json['autoLockMinutes'] as int? ?? 5,
+  );
 
   // ── Mutation ────────────────────────────────────────────────────────────────
 
@@ -60,12 +60,11 @@ class UserProfile {
     String? displayName,
     bool? biometricEnabled,
     int? autoLockMinutes,
-  }) =>
-      UserProfile(
-        displayName: displayName ?? this.displayName,
-        biometricEnabled: biometricEnabled ?? this.biometricEnabled,
-        autoLockMinutes: autoLockMinutes ?? this.autoLockMinutes,
-      );
+  }) => UserProfile(
+    displayName: displayName ?? this.displayName,
+    biometricEnabled: biometricEnabled ?? this.biometricEnabled,
+    autoLockMinutes: autoLockMinutes ?? this.autoLockMinutes,
+  );
 
   // ── Equality & Debug ────────────────────────────────────────────────────────
 
@@ -78,7 +77,8 @@ class UserProfile {
           other.autoLockMinutes == autoLockMinutes;
 
   @override
-  int get hashCode => Object.hash(displayName, biometricEnabled, autoLockMinutes);
+  int get hashCode =>
+      Object.hash(displayName, biometricEnabled, autoLockMinutes);
 
   @override
   String toString() =>

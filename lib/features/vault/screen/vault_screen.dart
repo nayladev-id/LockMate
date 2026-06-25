@@ -12,7 +12,7 @@ import '../widget/vault_item_card.dart';
 /// VaultScreen — halaman utama vault, desain sesuai referensi Stitch.
 ///
 /// Layout (CustomScrollView + Slivers):
-///   - SliverAppBar: "ZeroCrypt" (cyan) + avatar → settings
+///   - SliverAppBar: "lockmate" (cyan) + avatar → settings
 ///   - Search bar pill: "Search your vault..."
 ///   - Header "All Accounts" + badge counter
 ///   - SliverList vault items (VaultItemCard)
@@ -54,7 +54,7 @@ class _VaultScreenState extends State<VaultScreen> {
 
     // Ambil master password dari route arguments
     final args = ModalRoute.of(context)?.settings.arguments;
-    final mp   = args is String ? args : null;
+    final mp = args is String ? args : null;
 
     // Jika tidak ada dari route, tampilkan dialog
     final masterPassword = mp ?? await _askMasterPassword();
@@ -107,10 +107,8 @@ class _VaultScreenState extends State<VaultScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _AddEditSheet(
-        masterPassword: _masterPassword!,
-        editItem:       item,
-      ),
+      builder: (_) =>
+          _AddEditSheet(masterPassword: _masterPassword!, editItem: item),
     );
   }
 
@@ -159,7 +157,7 @@ class _VaultScreenState extends State<VaultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth    = context.watch<AuthProvider>();
+    final auth = context.watch<AuthProvider>();
     final profile = auth.profile;
 
     return Scaffold(
@@ -168,25 +166,27 @@ class _VaultScreenState extends State<VaultScreen> {
         slivers: [
           // ── SliverAppBar ────────────────────────────────────────────────
           SliverAppBar(
-            floating:        true,
-            snap:            true,
-            pinned:          false,
+            floating: true,
+            snap: true,
+            pinned: false,
             backgroundColor: const Color(0xFF131313),
-            elevation:       0,
+            elevation: 0,
             surfaceTintColor: Colors.transparent,
             leading: IconButton(
-              icon: const Icon(Icons.lock_outline_rounded,
-                  color: Color(0xFF00E5FF)),
+              icon: const Icon(
+                Icons.lock_outline_rounded,
+                color: Color(0xFF00E5FF),
+              ),
               tooltip: 'Lock Vault',
               onPressed: _logout,
             ),
             title: Text(
-              'ZeroCrypt',
+              'lockmate',
               style: AppTextStyles.titleLg.copyWith(
-                fontFamily:  'HankenGrotesk',
-                fontSize:    22,
-                fontWeight:  FontWeight.w700,
-                color:       const Color(0xFF00E5FF),
+                fontFamily: 'HankenGrotesk',
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF00E5FF),
               ),
             ),
             actions: [
@@ -194,7 +194,8 @@ class _VaultScreenState extends State<VaultScreen> {
                 onTap: () => Navigator.pushNamed(context, '/profile'),
                 child: Container(
                   margin: const EdgeInsets.only(right: 16),
-                  width: 40, height: 40,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: const Color(0xFF2A2A2A),
@@ -239,11 +240,11 @@ class _VaultScreenState extends State<VaultScreen> {
                 ),
                 cursorColor: const Color(0xFF00E5FF),
                 decoration: InputDecoration(
-                  hintText:  'Search your vault...',
+                  hintText: 'Search your vault...',
                   hintStyle: AppTextStyles.bodyMd.copyWith(
                     color: const Color(0xFF849396),
                   ),
-                  filled:    true,
+                  filled: true,
                   fillColor: const Color(0xFF1C1B1B),
                   prefixIcon: const Icon(
                     Icons.search_rounded,
@@ -251,8 +252,11 @@ class _VaultScreenState extends State<VaultScreen> {
                   ),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
-                          icon: const Icon(Icons.clear_rounded,
-                              color: Color(0xFF849396), size: 18),
+                          icon: const Icon(
+                            Icons.clear_rounded,
+                            color: Color(0xFF849396),
+                            size: 18,
+                          ),
                           onPressed: () {
                             _searchController.clear();
                             context.read<VaultProvider>().setSearchQuery('');
@@ -262,21 +266,20 @@ class _VaultScreenState extends State<VaultScreen> {
                       : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(999),
-                    borderSide: const BorderSide(
-                        color: Color(0x1AFFFFFF)),
+                    borderSide: const BorderSide(color: Color(0x1AFFFFFF)),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(999),
-                    borderSide: const BorderSide(
-                        color: Color(0x1AFFFFFF)),
+                    borderSide: const BorderSide(color: Color(0x1AFFFFFF)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(999),
                     borderSide: const BorderSide(
-                        color: Color(0xFF00E5FF), width: 1.5),
+                      color: Color(0xFF00E5FF),
+                      width: 1.5,
+                    ),
                   ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(vertical: 14),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
             ).animate().fadeIn(delay: 100.ms, duration: 350.ms),
@@ -293,9 +296,9 @@ class _VaultScreenState extends State<VaultScreen> {
                     'All Accounts',
                     style: AppTextStyles.titleLg.copyWith(
                       fontFamily: 'HankenGrotesk',
-                      fontSize:   22,
+                      fontSize: 22,
                       fontWeight: FontWeight.w500,
-                      color:      const Color(0xFFE5E2E1),
+                      color: const Color(0xFFE5E2E1),
                     ),
                   ),
                   // Badge item count
@@ -318,9 +321,7 @@ class _VaultScreenState extends State<VaultScreen> {
             builder: (ctx, vault, _) {
               // Loading
               if (vault.isLoading) {
-                return const SliverFillRemaining(
-                  child: _LoadingState(),
-                );
+                return const SliverFillRemaining(child: _LoadingState());
               }
 
               // Empty
@@ -337,26 +338,23 @@ class _VaultScreenState extends State<VaultScreen> {
               return SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (listCtx, i) {
-                      final item = vault.filteredItems[i];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: VaultItemCard(
-                          key:              ValueKey(item.id),
-                          item:             item,
-                          animationIndex:   i,
-                          isPasswordVisible: _visibleIds.contains(item.id),
-                          onTogglePassword: () => _toggleVisibility(item.id),
-                          onCopy:    () => vault.copyPassword(item.id, listCtx),
-                          onDelete:  () => _showDeleteSheet(listCtx, item),
-                          onEdit:    () => _showEditSheet(item),
-                          onTap:     () => _showDetailSheet(listCtx, item),
-                        ),
-                      );
-                    },
-                    childCount: vault.filteredItems.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((listCtx, i) {
+                    final item = vault.filteredItems[i];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: VaultItemCard(
+                        key: ValueKey(item.id),
+                        item: item,
+                        animationIndex: i,
+                        isPasswordVisible: _visibleIds.contains(item.id),
+                        onTogglePassword: () => _toggleVisibility(item.id),
+                        onCopy: () => vault.copyPassword(item.id, listCtx),
+                        onDelete: () => _showDeleteSheet(listCtx, item),
+                        onEdit: () => _showEditSheet(item),
+                        onTap: () => _showDetailSheet(listCtx, item),
+                      ),
+                    );
+                  }, childCount: vault.filteredItems.length),
                 ),
               );
             },
@@ -368,21 +366,22 @@ class _VaultScreenState extends State<VaultScreen> {
       ),
 
       // ── FAB ────────────────────────────────────────────────────────────
-      floatingActionButton: FloatingActionButton.large(
-        backgroundColor: const Color(0xFF00E5FF),
-        foregroundColor: const Color(0xFF00363D),
-        onPressed:       _showAddSheet,
-        tooltip:         'Add credential',
-        child:           const Icon(Icons.add_rounded, size: 36),
-      )
-          .animate()
-          .fadeIn(delay: 600.ms)
-          .scale(
-            begin: const Offset(0.7, 0.7),
-            delay: 600.ms,
-            duration: 400.ms,
-            curve: Curves.easeOutBack,
-          ),
+      floatingActionButton:
+          FloatingActionButton.large(
+                backgroundColor: const Color(0xFF00E5FF),
+                foregroundColor: const Color(0xFF00363D),
+                onPressed: _showAddSheet,
+                tooltip: 'Add credential',
+                child: const Icon(Icons.add_rounded, size: 36),
+              )
+              .animate()
+              .fadeIn(delay: 600.ms)
+              .scale(
+                begin: const Offset(0.7, 0.7),
+                delay: 600.ms,
+                duration: 400.ms,
+                curve: Curves.easeOutBack,
+              ),
     );
   }
 
@@ -394,7 +393,7 @@ class _VaultScreenState extends State<VaultScreen> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (_) => _DetailSheet(
-        item:   item,
+        item: item,
         onCopy: () => context.read<VaultProvider>().copyPassword(item.id, ctx),
       ),
     );
@@ -413,14 +412,14 @@ class _ItemBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color:        const Color(0xFF201F1F),
+        color: const Color(0xFF201F1F),
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: const Color(0x1AFFFFFF)),
       ),
       child: Text(
         '$count Items',
         style: AppTextStyles.labelMd.copyWith(
-          color:      const Color(0xFF00E5FF),
+          color: const Color(0xFF00E5FF),
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -437,7 +436,7 @@ class _LoadingState extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: CircularProgressIndicator(
-        color:       Color(0xFF00E5FF),
+        color: Color(0xFF00E5FF),
         strokeWidth: 2,
       ),
     );
@@ -449,7 +448,7 @@ class _LoadingState extends StatelessWidget {
 class _EmptyState extends StatelessWidget {
   const _EmptyState({required this.isSearching, required this.onAdd});
 
-  final bool         isSearching;
+  final bool isSearching;
   final VoidCallback onAdd;
 
   @override
@@ -461,10 +460,8 @@ class _EmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              isSearching
-                  ? Icons.search_off_rounded
-                  : Icons.shield_outlined,
-              size:  80,
+              isSearching ? Icons.search_off_rounded : Icons.shield_outlined,
+              size: 80,
               color: const Color(0xFF849396),
             ),
             const SizedBox(height: 16),
@@ -472,8 +469,8 @@ class _EmptyState extends StatelessWidget {
               isSearching ? 'No results found' : 'Your vault is empty',
               style: AppTextStyles.titleMd.copyWith(
                 fontFamily: 'HankenGrotesk',
-                fontSize:   20,
-                color:      const Color(0xFFBAC9CC),
+                fontSize: 20,
+                color: const Color(0xFFBAC9CC),
               ),
               textAlign: TextAlign.center,
             ),
@@ -491,14 +488,15 @@ class _EmptyState extends StatelessWidget {
               const SizedBox(height: 28),
               FilledButton.icon(
                 onPressed: onAdd,
-                icon:  const Icon(Icons.add_rounded),
-                label: Text('Add Credential',
-                    style: AppTextStyles.buttonLabel),
+                icon: const Icon(Icons.add_rounded),
+                label: Text('Add Credential', style: AppTextStyles.buttonLabel),
                 style: FilledButton.styleFrom(
                   backgroundColor: const Color(0xFF00E5FF),
                   foregroundColor: const Color(0xFF00363D),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 14),
+                    horizontal: 24,
+                    vertical: 14,
+                  ),
                   shape: const StadiumBorder(),
                 ),
               ),
@@ -539,10 +537,10 @@ class _MasterPasswordDialogState extends State<_MasterPasswordDialog> {
           ),
           const SizedBox(height: 16),
           TextField(
-            controller:  widget.controller,
+            controller: widget.controller,
             obscureText: _obscure,
-            autofocus:   true,
-            style:       AppTextStyles.passwordText,
+            autofocus: true,
+            style: AppTextStyles.passwordText,
             cursorColor: AppColors.kPrimaryContainer,
             decoration: InputDecoration(
               hintText: 'Master password',
@@ -571,8 +569,7 @@ class _MasterPasswordDialogState extends State<_MasterPasswordDialog> {
             backgroundColor: AppColors.kPrimaryContainer,
             foregroundColor: AppColors.kOnPrimary,
           ),
-          onPressed: () =>
-              Navigator.pop(context, widget.controller.text),
+          onPressed: () => Navigator.pop(context, widget.controller.text),
           child: Text('Unlock', style: AppTextStyles.buttonLabel),
         ),
       ],
@@ -585,7 +582,7 @@ class _MasterPasswordDialogState extends State<_MasterPasswordDialog> {
 class _DeleteSheet extends StatelessWidget {
   const _DeleteSheet({required this.item, required this.onConfirm});
 
-  final VaultItem    item;
+  final VaultItem item;
   final VoidCallback onConfirm;
 
   @override
@@ -598,7 +595,8 @@ class _DeleteSheet extends StatelessWidget {
           children: [
             // Handle
             Container(
-              width: 36, height: 4,
+              width: 36,
+              height: 4,
               decoration: BoxDecoration(
                 color: AppColors.kOnSurfaceVariant.withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(2),
@@ -611,8 +609,11 @@ class _DeleteSheet extends StatelessWidget {
               color: AppColors.kStrengthWeak,
             ),
             const SizedBox(height: 12),
-            Text('Delete "${item.platformName}"?',
-                style: AppTextStyles.titleMd, textAlign: TextAlign.center),
+            Text(
+              'Delete "${item.platformName}"?',
+              style: AppTextStyles.titleMd,
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 8),
             Text(
               'Item ini akan dihapus secara permanen dari vault.',
@@ -659,7 +660,7 @@ class _DeleteSheet extends StatelessWidget {
 class _DetailSheet extends StatefulWidget {
   const _DetailSheet({required this.item, required this.onCopy});
 
-  final VaultItem    item;
+  final VaultItem item;
   final VoidCallback onCopy;
 
   @override
@@ -674,13 +675,12 @@ class _DetailSheetState extends State<_DetailSheet> {
     final item = widget.item;
     return DraggableScrollableSheet(
       initialChildSize: 0.55,
-      minChildSize:     0.4,
-      maxChildSize:     0.85,
+      minChildSize: 0.4,
+      maxChildSize: 0.85,
       builder: (_, sc) => Container(
         decoration: BoxDecoration(
           color: AppColors.kSurfaceContainer,
-          borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(28)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           border: Border(
             top: BorderSide(color: AppColors.kGlassBorder, width: 1),
           ),
@@ -692,7 +692,8 @@ class _DetailSheetState extends State<_DetailSheet> {
             // Handle
             Center(
               child: Container(
-                width: 36, height: 4,
+                width: 36,
+                height: 4,
                 margin: const EdgeInsets.only(top: 12, bottom: 20),
                 decoration: BoxDecoration(
                   color: AppColors.kOnSurfaceVariant.withValues(alpha: 0.4),
@@ -705,12 +706,14 @@ class _DetailSheetState extends State<_DetailSheet> {
             Row(
               children: [
                 Container(
-                  width: 52, height: 52,
+                  width: 52,
+                  height: 52,
                   decoration: BoxDecoration(
                     color: item.iconColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                        color: item.iconColor.withValues(alpha: 0.25)),
+                      color: item.iconColor.withValues(alpha: 0.25),
+                    ),
                   ),
                   alignment: Alignment.center,
                   child: Text(
@@ -728,7 +731,7 @@ class _DetailSheetState extends State<_DetailSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(item.platformName, style: AppTextStyles.titleMd),
-                      Text(item.username,     style: AppTextStyles.bodyMd),
+                      Text(item.username, style: AppTextStyles.bodyMd),
                     ],
                   ),
                 ),
@@ -746,7 +749,7 @@ class _DetailSheetState extends State<_DetailSheet> {
               isPassword: true,
               isRevealed: _showPw,
               onToggle: () => setState(() => _showPw = !_showPw),
-              onCopy:   widget.onCopy,
+              onCopy: widget.onCopy,
             ),
             const SizedBox(height: 10),
 
@@ -759,8 +762,7 @@ class _DetailSheetState extends State<_DetailSheet> {
             ],
 
             const SizedBox(height: 16),
-            Text('Added ${item.formattedDate}',
-                style: AppTextStyles.labelMd),
+            Text('Added ${item.formattedDate}', style: AppTextStyles.labelMd),
           ],
         ),
       ),
@@ -780,10 +782,10 @@ class _DetailRow extends StatelessWidget {
     this.onCopy,
   });
 
-  final String       label;
-  final String       value;
-  final bool         isPassword;
-  final bool         isRevealed;
+  final String label;
+  final String value;
+  final bool isPassword;
+  final bool isRevealed;
   final VoidCallback? onToggle;
   final VoidCallback? onCopy;
 
@@ -849,12 +851,9 @@ class _DetailRow extends StatelessWidget {
 // ── _AddEditSheet ─────────────────────────────────────────────────────────────
 
 class _AddEditSheet extends StatefulWidget {
-  const _AddEditSheet({
-    required this.masterPassword,
-    this.editItem,
-  });
+  const _AddEditSheet({required this.masterPassword, this.editItem});
 
-  final String     masterPassword;
+  final String masterPassword;
   final VaultItem? editItem;
 
   @override
@@ -862,12 +861,12 @@ class _AddEditSheet extends StatefulWidget {
 }
 
 class _AddEditSheetState extends State<_AddEditSheet> {
-  final _formKey      = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _platformCtrl = TextEditingController();
   final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  final _notesCtrl    = TextEditingController();
-  bool _obscure       = true;
+  final _notesCtrl = TextEditingController();
+  bool _obscure = true;
 
   bool get _isEdit => widget.editItem != null;
 
@@ -879,7 +878,7 @@ class _AddEditSheetState extends State<_AddEditSheet> {
       _platformCtrl.text = e.platformName;
       _usernameCtrl.text = e.username;
       _passwordCtrl.text = e.decryptedPassword ?? '';
-      _notesCtrl.text    = e.notes ?? '';
+      _notesCtrl.text = e.notes ?? '';
     }
   }
 
@@ -899,18 +898,18 @@ class _AddEditSheetState extends State<_AddEditSheet> {
     final vault = context.read<VaultProvider>();
     if (_isEdit) {
       final updated = widget.editItem!.copyWith(
-        platformName:      _platformCtrl.text.trim(),
-        username:          _usernameCtrl.text.trim(),
+        platformName: _platformCtrl.text.trim(),
+        username: _usernameCtrl.text.trim(),
         decryptedPassword: _passwordCtrl.text,
-        notes:             _notesCtrl.text.isNotEmpty ? _notesCtrl.text : null,
+        notes: _notesCtrl.text.isNotEmpty ? _notesCtrl.text : null,
       );
       await vault.updateItem(updated, widget.masterPassword);
     } else {
       await vault.addItem(
-        platformName:   _platformCtrl.text.trim(),
-        username:       _usernameCtrl.text.trim(),
-        plainPassword:  _passwordCtrl.text,
-        notes:          _notesCtrl.text.isNotEmpty ? _notesCtrl.text : null,
+        platformName: _platformCtrl.text.trim(),
+        username: _usernameCtrl.text.trim(),
+        plainPassword: _passwordCtrl.text,
+        notes: _notesCtrl.text.isNotEmpty ? _notesCtrl.text : null,
         masterPassword: widget.masterPassword,
       );
     }
@@ -919,19 +918,17 @@ class _AddEditSheetState extends State<_AddEditSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading =
-        context.select<VaultProvider, bool>((v) => v.isLoading);
+    final isLoading = context.select<VaultProvider, bool>((v) => v.isLoading);
 
     return Padding(
       padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom),
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.kSurfaceContainer,
-          borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(28)),
-          border:
-              Border(top: BorderSide(color: AppColors.kGlassBorder)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          border: Border(top: BorderSide(color: AppColors.kGlassBorder)),
         ),
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
         child: Form(
@@ -943,7 +940,8 @@ class _AddEditSheetState extends State<_AddEditSheet> {
               // Handle
               Center(
                 child: Container(
-                  width: 36, height: 4,
+                  width: 36,
+                  height: 4,
                   decoration: BoxDecoration(
                     color: AppColors.kOnSurfaceVariant.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(2),
@@ -955,7 +953,8 @@ class _AddEditSheetState extends State<_AddEditSheet> {
               Text(
                 _isEdit ? 'Edit Credential' : 'Add Credential',
                 style: AppTextStyles.titleMd.copyWith(
-                    color: AppColors.kPrimaryContainer),
+                  color: AppColors.kPrimaryContainer,
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -971,7 +970,8 @@ class _AddEditSheetState extends State<_AddEditSheet> {
                   prefixIcon: Icon(Icons.language_outlined, size: 20),
                 ),
                 validator: (v) => (v == null || v.trim().isEmpty)
-                    ? 'Nama platform wajib diisi' : null,
+                    ? 'Nama platform wajib diisi'
+                    : null,
               ),
               const SizedBox(height: 14),
 
@@ -987,7 +987,8 @@ class _AddEditSheetState extends State<_AddEditSheet> {
                   prefixIcon: Icon(Icons.person_outline_rounded, size: 20),
                 ),
                 validator: (v) => (v == null || v.trim().isEmpty)
-                    ? 'Username wajib diisi' : null,
+                    ? 'Username wajib diisi'
+                    : null,
               ),
               const SizedBox(height: 14),
 
@@ -1038,13 +1039,14 @@ class _AddEditSheetState extends State<_AddEditSheet> {
                   onPressed: isLoading ? null : _submit,
                   icon: isLoading
                       ? const SizedBox(
-                          width: 16, height: 16,
+                          width: 16,
+                          height: 16,
                           child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Color(0xFF00363D)))
-                      : Icon(_isEdit
-                            ? Icons.save_rounded
-                            : Icons.add_rounded),
+                            strokeWidth: 2,
+                            color: Color(0xFF00363D),
+                          ),
+                        )
+                      : Icon(_isEdit ? Icons.save_rounded : Icons.add_rounded),
                   label: Text(
                     _isEdit ? 'Save Changes' : 'Add to Vault',
                     style: AppTextStyles.buttonLabel,

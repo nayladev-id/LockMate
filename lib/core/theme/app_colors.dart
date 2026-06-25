@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Token warna ZeroCrypt — SATU-SATUNYA sumber kebenaran warna.
+/// Token warna lockmate — SATU-SATUNYA sumber kebenaran warna.
 ///
 /// Aturan:
 /// - Dilarang hardcode hex di widget manapun.

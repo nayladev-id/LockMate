@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
-/// Semua TextStyle ZeroCrypt — SATU-SATUNYA sumber kebenaran tipografi.
+/// Semua TextStyle lockmate — SATU-SATUNYA sumber kebenaran tipografi.
 ///
 /// Font mapping:
 ///   Headline / Title → HankenGrotesk (w700 / w500)

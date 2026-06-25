@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 import 'app_text_styles.dart';
 
-/// ThemeData ZeroCrypt — dark only, Material 3.
+/// ThemeData lockmate — dark only, Material 3.
 ///
 /// Penggunaan:
 /// ```dart
@@ -64,31 +64,31 @@ abstract final class AppTheme {
   // ── TextTheme ─────────────────────────────────────────────────────────────
 
   static TextTheme get _textTheme => TextTheme(
-        // Display
-        displayLarge: AppTextStyles.headlineLg,
-        displayMedium: AppTextStyles.headlineMd,
-        displaySmall: AppTextStyles.titleLg,
+    // Display
+    displayLarge: AppTextStyles.headlineLg,
+    displayMedium: AppTextStyles.headlineMd,
+    displaySmall: AppTextStyles.titleLg,
 
-        // Headline
-        headlineLarge: AppTextStyles.headlineLg,
-        headlineMedium: AppTextStyles.headlineMd,
-        headlineSmall: AppTextStyles.titleLg,
+    // Headline
+    headlineLarge: AppTextStyles.headlineLg,
+    headlineMedium: AppTextStyles.headlineMd,
+    headlineSmall: AppTextStyles.titleLg,
 
-        // Title
-        titleLarge: AppTextStyles.titleMd,
-        titleMedium: AppTextStyles.titleSm,
-        titleSmall: AppTextStyles.titleSm,
+    // Title
+    titleLarge: AppTextStyles.titleMd,
+    titleMedium: AppTextStyles.titleSm,
+    titleSmall: AppTextStyles.titleSm,
 
-        // Body
-        bodyLarge: AppTextStyles.bodyLg,
-        bodyMedium: AppTextStyles.bodyMd,
-        bodySmall: AppTextStyles.bodySm,
+    // Body
+    bodyLarge: AppTextStyles.bodyLg,
+    bodyMedium: AppTextStyles.bodyMd,
+    bodySmall: AppTextStyles.bodySm,
 
-        // Label
-        labelLarge: AppTextStyles.buttonLabel,
-        labelMedium: AppTextStyles.labelMd,
-        labelSmall: AppTextStyles.labelSm,
-      );
+    // Label
+    labelLarge: AppTextStyles.buttonLabel,
+    labelMedium: AppTextStyles.labelMd,
+    labelSmall: AppTextStyles.labelSm,
+  );
 
   // ── darkTheme ─────────────────────────────────────────────────────────────
 
@@ -110,10 +110,7 @@ abstract final class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: AppTextStyles.titleMd,
-        iconTheme: const IconThemeData(
-          color: AppColors.kOnSurface,
-          size: 24,
-        ),
+        iconTheme: const IconThemeData(color: AppColors.kOnSurface, size: 24),
         actionsIconTheme: const IconThemeData(
           color: AppColors.kOnSurface,
           size: 24,
@@ -142,8 +139,9 @@ abstract final class AppTheme {
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           return states.contains(WidgetState.selected)
-              ? AppTextStyles.labelSm
-                  .copyWith(color: AppColors.kPrimaryContainer)
+              ? AppTextStyles.labelSm.copyWith(
+                  color: AppColors.kPrimaryContainer,
+                )
               : AppTextStyles.labelSm;
         }),
       ),
@@ -168,12 +166,16 @@ abstract final class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.kPrimaryContainer,
           disabledForegroundColor: AppColors.kDisabled,
-          side: const BorderSide(color: AppColors.kPrimaryContainer, width: 1.5),
+          side: const BorderSide(
+            color: AppColors.kPrimaryContainer,
+            width: 1.5,
+          ),
           shape: const StadiumBorder(),
           minimumSize: const Size(0, 52),
           padding: const EdgeInsets.symmetric(horizontal: 28),
-          textStyle: AppTextStyles.buttonLabel
-              .copyWith(color: AppColors.kPrimaryContainer),
+          textStyle: AppTextStyles.buttonLabel.copyWith(
+            color: AppColors.kPrimaryContainer,
+          ),
         ),
       ),
 
@@ -182,8 +184,9 @@ abstract final class AppTheme {
         style: TextButton.styleFrom(
           foregroundColor: AppColors.kPrimaryContainer,
           shape: const StadiumBorder(),
-          textStyle: AppTextStyles.bodyMd
-              .copyWith(color: AppColors.kPrimaryContainer),
+          textStyle: AppTextStyles.bodyMd.copyWith(
+            color: AppColors.kPrimaryContainer,
+          ),
         ),
       ),
 
@@ -199,8 +202,10 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.kSurfaceContainerHigh,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.kOutline),
@@ -211,8 +216,10 @@ abstract final class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              const BorderSide(color: AppColors.kPrimaryContainer, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.kPrimaryContainer,
+            width: 1.5,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -221,16 +228,20 @@ abstract final class AppTheme {
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
-              color: AppColors.kErrorContainer, width: 1.5),
+            color: AppColors.kErrorContainer,
+            width: 1.5,
+          ),
         ),
         hintStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.kDisabled),
         labelStyle: AppTextStyles.bodyMd,
-        floatingLabelStyle: AppTextStyles.labelMd
-            .copyWith(color: AppColors.kPrimaryContainer),
+        floatingLabelStyle: AppTextStyles.labelMd.copyWith(
+          color: AppColors.kPrimaryContainer,
+        ),
         prefixIconColor: AppColors.kOnSurfaceVariant,
         suffixIconColor: AppColors.kOnSurfaceVariant,
-        errorStyle: AppTextStyles.bodySm
-            .copyWith(color: AppColors.kOnErrorContainer),
+        errorStyle: AppTextStyles.bodySm.copyWith(
+          color: AppColors.kOnErrorContainer,
+        ),
       ),
 
       // ── Chip ──────────────────────────────────────────────────────────────
@@ -283,22 +294,25 @@ abstract final class AppTheme {
 
       // ── Switch ────────────────────────────────────────────────────────────
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((s) => s
-                .contains(WidgetState.selected)
-            ? AppColors.kOnPrimary
-            : AppColors.kOnSurfaceVariant),
-        trackColor: WidgetStateProperty.resolveWith((s) =>
-            s.contains(WidgetState.selected)
-                ? AppColors.kPrimaryContainer
-                : AppColors.kDivider),
+        thumbColor: WidgetStateProperty.resolveWith(
+          (s) => s.contains(WidgetState.selected)
+              ? AppColors.kOnPrimary
+              : AppColors.kOnSurfaceVariant,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (s) => s.contains(WidgetState.selected)
+              ? AppColors.kPrimaryContainer
+              : AppColors.kDivider,
+        ),
       ),
 
       // ── Checkbox ──────────────────────────────────────────────────────────
       checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith((s) =>
-            s.contains(WidgetState.selected)
-                ? AppColors.kPrimaryContainer
-                : Colors.transparent),
+        fillColor: WidgetStateProperty.resolveWith(
+          (s) => s.contains(WidgetState.selected)
+              ? AppColors.kPrimaryContainer
+              : Colors.transparent,
+        ),
         checkColor: WidgetStateProperty.all(AppColors.kOnPrimary),
         side: const BorderSide(color: AppColors.kOnSurfaceVariant, width: 1.5),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),

@@ -11,7 +11,7 @@ const List<Color> _kIconColors = [
   Color(0xFF595959),
 ];
 
-/// VaultItem — satu entri di vault ZeroCrypt.
+/// VaultItem — satu entri di vault lockmate.
 ///
 /// Kebijakan keamanan WAJIB:
 ///   - [encryptedPassword] di storage SELALU berisi ciphertext AES-256-GCM
@@ -108,15 +108,15 @@ class VaultItem {
   }) {
     final now = DateTime.now();
     return VaultItem(
-      id:                generateId(),
-      platformName:      platformName.trim(),
-      username:          username.trim(),
+      id: generateId(),
+      platformName: platformName.trim(),
+      username: username.trim(),
       encryptedPassword: encryptedPassword,
-      notes:             encryptedNotes,
-      iconInitials:      _initialsFrom(platformName),
-      iconColor:         _colorFromPlatform(platformName),
-      createdAt:         now,
-      updatedAt:         now,
+      notes: encryptedNotes,
+      iconInitials: _initialsFrom(platformName),
+      iconColor: _colorFromPlatform(platformName),
+      createdAt: now,
+      updatedAt: now,
       decryptedPassword: decryptedPassword,
     );
   }
@@ -127,16 +127,16 @@ class VaultItem {
   ///
   /// [decryptedPassword] TIDAK ikut di-serialize — hanya ada di memori.
   Map<String, dynamic> toJson() => {
-        'id':                id,
-        'platformName':      platformName,
-        'username':          username,
-        'encryptedPassword': encryptedPassword,
-        if (notes != null) 'notes': notes,
-        'iconInitials':      iconInitials,
-        'iconColor':         iconColor.toARGB32(),
-        'createdAt':         createdAt.millisecondsSinceEpoch,
-        'updatedAt':         updatedAt.millisecondsSinceEpoch,
-      };
+    'id': id,
+    'platformName': platformName,
+    'username': username,
+    'encryptedPassword': encryptedPassword,
+    if (notes != null) 'notes': notes,
+    'iconInitials': iconInitials,
+    'iconColor': iconColor.toARGB32(),
+    'createdAt': createdAt.millisecondsSinceEpoch,
+    'updatedAt': updatedAt.millisecondsSinceEpoch,
+  };
 
   /// Buat [VaultItem] dari JSON yang diambil [StorageService.getVaultItems()].
   ///
@@ -144,12 +144,12 @@ class VaultItem {
   factory VaultItem.fromJson(Map<String, dynamic> json) {
     final name = json['platformName'] as String? ?? '';
     return VaultItem(
-      id:                json['id']                as String?  ?? generateId(),
-      platformName:      name,
-      username:          json['username']          as String?  ?? '',
-      encryptedPassword: json['encryptedPassword'] as String?  ?? '',
-      notes:             json['notes']             as String?,
-      iconInitials:      json['iconInitials']      as String?  ?? _initialsFrom(name),
+      id: json['id'] as String? ?? generateId(),
+      platformName: name,
+      username: json['username'] as String? ?? '',
+      encryptedPassword: json['encryptedPassword'] as String? ?? '',
+      notes: json['notes'] as String?,
+      iconInitials: json['iconInitials'] as String? ?? _initialsFrom(name),
       iconColor: json['iconColor'] != null
           ? Color(json['iconColor'] as int)
           : _colorFromPlatform(name),
@@ -179,40 +179,52 @@ class VaultItem {
   }) {
     final newName = platformName ?? this.platformName;
     return VaultItem(
-      id:                id,
-      platformName:      newName,
-      username:          username          ?? this.username,
+      id: id,
+      platformName: newName,
+      username: username ?? this.username,
       encryptedPassword: encryptedPassword ?? this.encryptedPassword,
-      notes:             clearNotes   ? null : notes    ?? this.notes,
-      iconInitials:      _initialsFrom(newName),
-      iconColor:         _colorFromPlatform(newName),
-      createdAt:         createdAt,
-      updatedAt:         DateTime.now(),
-      decryptedPassword: clearDecrypted ? null : decryptedPassword ?? this.decryptedPassword,
+      notes: clearNotes ? null : notes ?? this.notes,
+      iconInitials: _initialsFrom(newName),
+      iconColor: _colorFromPlatform(newName),
+      createdAt: createdAt,
+      updatedAt: DateTime.now(),
+      decryptedPassword: clearDecrypted
+          ? null
+          : decryptedPassword ?? this.decryptedPassword,
     );
   }
 
   /// Buat salinan dengan [decryptedPassword] diisi (setelah dekripsi di provider).
   VaultItem withDecrypted(String plaintext) => VaultItem(
-        id:                id,
-        platformName:      platformName,
-        username:          username,
-        encryptedPassword: encryptedPassword,
-        notes:             notes,
-        iconInitials:      iconInitials,
-        iconColor:         iconColor,
-        createdAt:         createdAt,
-        updatedAt:         updatedAt,
-        decryptedPassword: plaintext,
-      );
+    id: id,
+    platformName: platformName,
+    username: username,
+    encryptedPassword: encryptedPassword,
+    notes: notes,
+    iconInitials: iconInitials,
+    iconColor: iconColor,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    decryptedPassword: plaintext,
+  );
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   /// Formatted tanggal update terakhir untuk UI.
   String get formattedDate {
     final months = [
-      'Jan','Feb','Mar','Apr','May','Jun',
-      'Jul','Aug','Sep','Oct','Nov','Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${updatedAt.day} ${months[updatedAt.month - 1]} ${updatedAt.year}';
   }
@@ -225,8 +237,7 @@ class VaultItem {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is VaultItem && other.id == id;
+      identical(this, other) || other is VaultItem && other.id == id;
 
   @override
   int get hashCode => id.hashCode;

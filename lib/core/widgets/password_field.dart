@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-/// PasswordField — input field khusus untuk password/secret ZeroCrypt.
+/// PasswordField — input field khusus untuk password/secret lockmate.
 ///
 /// Fitur:
 /// - Toggle obscureText via eye icon di suffix
@@ -146,8 +146,9 @@ class _PasswordFieldState extends State<PasswordField> {
 
         // Override labelStyle saat focus (Cyber Blue)
         labelStyle: AppTextStyles.bodyMd,
-        floatingLabelStyle:
-            AppTextStyles.labelMd.copyWith(color: AppColors.kPrimaryContainer),
+        floatingLabelStyle: AppTextStyles.labelMd.copyWith(
+          color: AppColors.kPrimaryContainer,
+        ),
 
         // Prefix icon opsional
         prefixIcon: widget.prefixIcon != null
@@ -197,8 +198,7 @@ class _PasswordFieldState extends State<PasswordField> {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              const BorderSide(color: AppColors.kErrorContainer),
+          borderSide: const BorderSide(color: AppColors.kErrorContainer),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -209,13 +209,13 @@ class _PasswordFieldState extends State<PasswordField> {
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide:
-              const BorderSide(color: AppColors.kSurfaceContainerHigh),
+          borderSide: const BorderSide(color: AppColors.kSurfaceContainerHigh),
         ),
 
         hintStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.kDisabled),
-        errorStyle: AppTextStyles.bodySm
-            .copyWith(color: AppColors.kOnErrorContainer),
+        errorStyle: AppTextStyles.bodySm.copyWith(
+          color: AppColors.kOnErrorContainer,
+        ),
         errorMaxLines: 2,
       ),
     );
@@ -225,10 +225,7 @@ class _PasswordFieldState extends State<PasswordField> {
 /// Eye toggle button — suffix widget untuk PasswordField.
 /// Terpisah agar mudah di-test dan tidak trigger rebuild seluruh field.
 class _EyeToggleButton extends StatelessWidget {
-  const _EyeToggleButton({
-    required this.obscure,
-    required this.onToggle,
-  });
+  const _EyeToggleButton({required this.obscure, required this.onToggle});
 
   final bool obscure;
   final VoidCallback onToggle;
@@ -247,9 +244,7 @@ class _EyeToggleButton extends StatelessWidget {
           child: FadeTransition(opacity: anim, child: child),
         ),
         child: Icon(
-          obscure
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
+          obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
           key: ValueKey(obscure),
           color: AppColors.kPrimaryContainer,
           size: 20,
