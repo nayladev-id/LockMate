@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // 1. Tambahkan import ini
 
 import 'app/app.dart';
 import 'features/auth/provider/auth_provider.dart';
@@ -9,36 +10,30 @@ import 'services/crypto_service.dart';
 import 'services/secure_storage_service.dart';
 import 'services/storage_service.dart';
 
-/// Entry point lockmate.
-///
-/// Urutan inisialisasi (WAJIB dijaga):
-///   1. [WidgetsFlutterBinding.ensureInitialized] — wajib sebelum kode async
-///   2. [SharedPreferences.getInstance]           — warm-up sekali
-///   3. Instansiasi services (tidak ada async di constructor)
-///   4. [MultiProvider]                           — inject ke root widget tree
-///   5. [lockmateApp]                            — MaterialApp + routes
-///
-/// ATURAN MUTLAK:
-///   - Tidak ada http / dio / network call di sini atau di seluruh app.
-///   - Master password TIDAK boleh ada di variabel manapun di sini.
 Future<void> main() async {
   // ── 1. Flutter binding ────────────────────────────────────────────────────
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ── 2. SharedPreferences warm-up ──────────────────────────────────────────
+  // ── 2. Inisialisasi Supabase (Tambahan Baru) ──────────────────────────────
+  await Supabase.initialize(
+    url:
+        'https://badwaxzuelgjvawytbuu.supabase.co', // Ganti dengan URL dari dashboard Supabase
+    anonKey:
+        'sb_publishable_em6jbrr_Y-NFkTEBk7VoWA_EXvDSqrv', // Ganti dengan Anon Key dari dashboard Supabase
+  );
+
+  // ── 3. SharedPreferences warm-up ──────────────────────────────────────────
   await SharedPreferences.getInstance();
 
-  // ── 3. Instansiasi services ────────────────────────────────────────────────
-  // Services tidak menyimpan state — aman diinstansiasi di sini.
-  final cryptoService        = CryptoService();
+  // ── 4. Instansiasi services ────────────────────────────────────────────────
+  final cryptoService = CryptoService();
   final secureStorageService = SecureStorageService();
-  final storageService       = StorageService();
+  final storageService = StorageService();
 
-  // ── 4. Bootstrap app dengan Provider ──────────────────────────────────────
+  // ── 5. Bootstrap app dengan Provider ──────────────────────────────────────
   runApp(
     MultiProvider(
       providers: [
-        // ── AuthProvider — diisi Sesi 2 ─────────────────────────────────────
         ChangeNotifierProvider<AuthProvider>(
           create: (_) => AuthProvider(
             crypto: cryptoService,
@@ -46,13 +41,9 @@ Future<void> main() async {
             storage: storageService,
           ),
         ),
-
-        // ── VaultProvider — full impl Sesi 3 ────────────────────────────────
         ChangeNotifierProvider<VaultProvider>(
-          create: (_) => VaultProvider(
-            storage: storageService,
-            crypto: cryptoService,
-          ),
+          create: (_) =>
+              VaultProvider(storage: storageService, crypto: cryptoService),
         ),
       ],
       child: const LockMateApp(),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -194,9 +195,16 @@ class VaultProvider extends ChangeNotifier {
 
       // Simpan seluruh list (terenkripsi) ke storage
       await _storage.saveVaultItems(_encryptedMaps(masterPassword));
+      // fungsi add item menyimpan data ke supabase
+      await Supabase.instance.client.from('vault_data').insert({
+        'account_name': platformName,
+        'username': username,
+        'encrypted_password': encryptedPass,
+      });
 
       notifyListeners();
     } catch (e) {
+      print('ERROR SUPABASE: $e');
       _setError('Gagal menyimpan item. Coba lagi.');
     } finally {
       _setLoading(false);
