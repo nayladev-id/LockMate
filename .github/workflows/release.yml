@@ -35,3 +35,10 @@ jobs:
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           STORE_FILE: upload-keystore.jks
+
+      # Tambahkan bagian ini agar filenya muncul!
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-bundle
+          path: build/app/outputs/bundle/release/app-release.aab
